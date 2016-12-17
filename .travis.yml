@@ -5,6 +5,9 @@ matrix:
   include:
     - go: 1.7
 
+before_install:
+  - go get github.com/mattn/goveralls
+
 install:
   - # skip
 
@@ -13,3 +16,4 @@ script:
   - diff -u <(echo -n) <(gofmt -d .)
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
+  - $HOME/gopath/bin/goveralls -service=travis-ci

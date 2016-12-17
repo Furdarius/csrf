@@ -1,5 +1,5 @@
 # Furdarius\CSRF
-[![Build Status](https://travis-ci.org/Furdarius/csrf.svg?branch=master)](https://travis-ci.org/Furdarius/csrf)
+[![Build Status](https://travis-ci.org/Furdarius/csrf.svg?branch=master)](https://travis-ci.org/Furdarius/csrf) [![Coverage Status](https://coveralls.io/repos/github/Furdarius/csrf/badge.svg?branch=master)](https://coveralls.io/github/Furdarius/csrf?branch=master)
 
 Library provides powerful **stateless** and fast (`~638 ns/op` *token generation*) **CSRF protection** using idea of [Double Submit](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#Double_Submit_Cookie)
 
