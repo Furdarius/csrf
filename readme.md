@@ -20,7 +20,7 @@ Furdarius/csrf is easy to use: add the middleware to your router with the below:
     
 ```go
 // .. router init ..
-handler := csrf.New(router)
+csrf := csrf.Middleware(csrf.Secure(cfg.IsHttps))(router)
 http.ListenAndServe(":8000", handler)
 ```
 
@@ -31,3 +31,91 @@ On the client side token value must be taken from the `X-CSRF-Token` header. On 
 ```javascript
 myReq.setRequestHeader("X-CSRF-Token", tokenValueHere);
 ```
+
+
+## Options
+
+You can customize setting of middleware using options.
+
+
+```go
+csrf := csrf.Middleware(csrf.Secure(true), csrf.MaxAge(30), csrf.CookieName("MYNAME"))
+```
+
+### Available options:
+
+
+#### MaxAge
+Sets the maximum age (in minutes) of a CSRF token's underlying cookie.
+
+```go
+func MaxAge(age int) Option
+```
+
+Default: 1 hour.
+
+#### Domain
+Domain sets the cookie domain.
+
+This should be a hostname and not a URL. If set, the domain is treated as
+being prefixed with a `.` - e.g. `domain.io` becomes `.domain.io` and
+matches `www.domain.io` and `secure.domain.io`.
+
+```go
+func Domain(age int) Option
+```
+
+Default: current domain of the request only (*recommended*).
+
+#### Secure
+
+Secure sets the `Secure` flag on the cookie.
+
+Set this to `false` in your development environment otherwise the cookie won't
+be sent over an insecure channel. Setting this via the presence of a `DEV`
+environmental variable is a good way of making sure this won't make it to a production environment.
+
+
+```go
+func Secure(s bool) Option
+```
+
+ Default: `true` (*recommended*).
+
+#### ErrHandler
+
+ErrHandler allows you to change the handler called when CSRF request processing encounters an invalid token or request.
+
+A typical use would be to provide a handler that returns a static HTML file with a HTTP 403 status.
+
+```go
+// ErrorHandler is function using to process error in csrf protection
+type ErrorHandler func(http.ResponseWriter, *http.Request, error)
+
+func ErrHandler(h ErrorHandler) Option
+```
+
+By default a HTTP 403 status and a plain text CSRF failure reason are served.
+
+#### RequestHeader
+
+RequestHeader allows you to change the request header the CSRF middleware inspects.
+
+```go
+func RequestHeader(header string) Option 
+```
+
+Default: `X-CSRF-Token`
+
+
+#### CookieName
+
+CookieName changes the name of the CSRF cookie issued to clients.
+
+ Note that cookie names should not contain whitespace, commas, semicolons, backslashes or control characters as per [RFC6265](https://tools.ietf.org/html/rfc6265).
+
+```go
+func CookieName(name string) Option
+```
+
+Default: `X-CSRF-Token`
