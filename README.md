@@ -20,7 +20,9 @@ Furdarius/csrf is easy to use: add the middleware to your router with the below:
     
 ```go
 // .. router init ..
-csrf := csrf.Middleware(csrf.Secure(cfg.IsHttps))(router)
+
+handler := csrf.Middleware(csrf.Secure(cfg.IsHttps))(router)
+
 http.ListenAndServe(":8000", handler)
 ```
 
@@ -39,7 +41,7 @@ You can customize setting of middleware using options.
 
 
 ```go
-csrf := csrf.Middleware(csrf.Secure(true), csrf.MaxAge(30), csrf.CookieName("MYNAME"))
+handler := csrf.Middleware(csrf.Secure(true), csrf.MaxAge(30), csrf.CookieName("MYNAME"))
 ```
 
 ### Available options:
